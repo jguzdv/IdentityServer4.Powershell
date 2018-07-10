@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.0-preview-03" />
+
+    <PackageReference Include="IdentityServer4" Version="2.1.0" />
+    <PackageReference Include="IdentityServer4.EntityFramework" Version="2.1.0" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
+  </ItemGroup>
+
+  <Target Name="PackForGalerie" AfterTargets="Publish">
+    <ItemGroup>
+      <FilesToMove Include="$(PublishDir)*" />
+    </ItemGroup>
+    <!-- <MakeDir Directories="$(PublishDir)lib" /> 
+    <Move SourceFiles="@(FilesToMove)" DestinationFolder="$(PublishDir)lib/%(RecursiveDir)" />
+    <Exec Command="move $(PublishDir)runtimes $(PublishDir)lib\runtimes" />
+    <Copy SourceFiles="$(ProjectDir)psmodule/IdentityServer4.Management.psd1" DestinationFolder="$(PublishDir)" /> -->
+    
+    <Exec Command="powershell.exe -NoLogo -ExecutionPolicy Unrestricted -Command &quot;&amp; '$(ProjectDir)psmodule\Create-PSGPack.ps1' -PublishPath '$(PublishDir)' -ModuleFile '$(ProjectDir)psmodule\IdentityServer4.Management.psd1'&quot;" />
+  </Target>
+</Project>
