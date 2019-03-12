@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.EntityFramework.Mappers;
@@ -24,35 +24,30 @@ namespace IdentityServer4.Powershell.Controllers
                 , true);
         }
 
-        internal ApiResource GetApiResource(string apiName)
+        internal void GetApiResource(string apiName)
         {
             var store = new ResourceStore(DbContext, NullLogger<ResourceStore>.Instance);
             var apiResource = store.FindApiResourceAsync(apiName).Result;
 
             Cmdlet.WriteObject(apiResource);
-            return apiResource;
         }
 
-        internal ApiResource[] GetApiResources(string[] apiScopes)
+        internal void GetApiResources(string[] apiScopes)
         {
             var store = new ResourceStore(DbContext, NullLogger<ResourceStore>.Instance);
             var apiResources = store.FindApiResourcesByScopeAsync(apiScopes).Result;
 
-            var result = apiResources.ToArray();
-            Cmdlet.WriteObject(result);
-
-            return result;
+            foreach(var resource in apiResources)
+                Cmdlet.WriteObject(resource);
         }
 
-        internal ApiResource[] GetApiResources()
+        internal void GetApiResources()
         {
             var store = new ResourceStore(DbContext, NullLogger<ResourceStore>.Instance);
             var resources = store.GetAllResourcesAsync().Result;
 
-            var result = resources.ApiResources.ToArray();
-            Cmdlet.WriteObject(result);
-
-            return result;
+            foreach(var resource in resources.ApiResources)
+                Cmdlet.WriteObject(resource);
         }
 
         internal void AddApiResource(ApiResource apiResource, bool passThrough)

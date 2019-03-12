@@ -1,4 +1,4 @@
-﻿using IdentityServer4.EntityFramework.Interfaces;
+using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.EntityFramework.Stores;
 using IdentityServer4.Powershell.Cmdlets;
@@ -53,7 +53,8 @@ namespace IdentityServer4.Powershell.Controllers
                 .Select(c => c.ToModel())
                 .ToArray();
 
-            Cmdlet.WriteObject(clients);
+            foreach(var client in clients)
+                Cmdlet.WriteObject(client);
         }
 
         internal void AddClient(Models.Client client, bool passThrough)
